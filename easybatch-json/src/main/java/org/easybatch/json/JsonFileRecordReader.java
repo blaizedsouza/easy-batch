@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -29,6 +29,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 
 /**
  * Record reader that reads Json records from an Json file with the following format:
@@ -56,7 +57,10 @@ public class JsonFileRecordReader extends AbstractFileRecordReader {
      * Create a new {@link JsonFileRecordReader}.
      *
      * @param jsonFile to read
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Use {@link JsonFileRecordReader#JsonFileRecordReader(java.nio.file.Path)} instead
      */
+    @Deprecated
     public JsonFileRecordReader(final File jsonFile) {
         this(jsonFile, Charset.defaultCharset().name());
     }
@@ -66,9 +70,31 @@ public class JsonFileRecordReader extends AbstractFileRecordReader {
      *
      * @param jsonFile to read
      * @param charset of the file
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Use {@link JsonFileRecordReader#JsonFileRecordReader(java.nio.file.Path, java.nio.charset.Charset)} instead
      */
+    @Deprecated
     public JsonFileRecordReader(final File jsonFile, final String charset) {
         super(jsonFile, Charset.forName(charset));
+    }
+
+    /**
+     * Create a new {@link JsonFileRecordReader}.
+     *
+     * @param jsonFile to read
+     */
+    public JsonFileRecordReader(final Path jsonFile) {
+        this(jsonFile, Charset.defaultCharset());
+    }
+
+    /**
+     * Create a new {@link JsonFileRecordReader}.
+     *
+     * @param jsonFile to read
+     * @param charset of the file
+     */
+    public JsonFileRecordReader(final Path jsonFile, final Charset charset) {
+        super(jsonFile, charset);
     }
 
     @Override
@@ -88,7 +114,7 @@ public class JsonFileRecordReader extends AbstractFileRecordReader {
     }
 
     // JsonFileRecordReader should return the file name as data source instead of the inherited "Json stream"
-    private class Reader extends JsonRecordReader {
+    private static class Reader extends JsonRecordReader {
 
         private File file;
 

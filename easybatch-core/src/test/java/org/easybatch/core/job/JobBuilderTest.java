@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,7 @@ public class JobBuilderTest {
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void whenErrorThresholdIsLessThanOne_thenShouldThrowAnIllegalArgumentException() throws Exception {
-        JobBuilder.aNewJob().errorThreshold(0);
+    public void whenErrorThresholdIsLessThanZero_thenShouldThrowAnIllegalArgumentException() throws Exception {
+        JobBuilder.aNewJob().errorThreshold(-1);
     }
 }

@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -65,7 +65,7 @@ public class MultiYamlFileRecordReaderTest {
 
     }
 
-    private class YamlFileFilter implements FilenameFilter {
+    private static class YamlFileFilter implements FilenameFilter {
         @Override
         public boolean accept(File dir, String name) {
             return name.endsWith("yml");

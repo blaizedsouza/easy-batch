@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -40,7 +40,11 @@ public class Header {
      * @param number       physical record number in the data source (if defined).
      * @param source       data source name from which this record has been read.
      * @param creationDate date at which the record has been read.
+     *
+     * @deprecated Starting from v6, this constructor will be replaced with a one that
+     * accepts a {@code java.time.LocalDateTime}.
      */
+    @Deprecated
     public Header(Long number, String source, Date creationDate) {
         this.number = number;
         this.source = source;
@@ -63,7 +67,10 @@ public class Header {
 
     /**
      * Return the date at which the record has been read.
+     *
+     * @deprecated Starting from v6, this method be replaced with a method that returns a {@code java.time.LocalDateTime}
      */
+    @Deprecated
     public Date getCreationDate() {
         return creationDate;
     }

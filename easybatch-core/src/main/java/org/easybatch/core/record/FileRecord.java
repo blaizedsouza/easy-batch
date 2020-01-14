@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -37,7 +37,11 @@ public class FileRecord extends GenericRecord<File> {
      *
      * @param header  the record header
      * @param payload the record payload
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * It will be replaced with a constructor that accepts a {@code java.nio.file.Path}.
      */
+    // TODO update FileExtensionFilter accordingly for v6 when the payload becomes a Path
+    @Deprecated
     public FileRecord(final Header header, final File payload) {
         super(header, payload);
     }

@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -26,13 +26,12 @@ package org.easybatch.jpa;
 import org.easybatch.core.record.Batch;
 import org.easybatch.core.record.Record;
 import org.easybatch.core.writer.RecordWriter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.EntityTransaction;
-
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static org.easybatch.core.util.Utils.checkNotNull;
 
@@ -43,7 +42,7 @@ import static org.easybatch.core.util.Utils.checkNotNull;
  */
 public class JpaRecordWriter implements RecordWriter {
 
-    private static final Logger LOGGER = Logger.getLogger(JpaRecordWriter.class.getSimpleName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(JpaRecordWriter.class.getSimpleName());
 
     private EntityManagerFactory entityManagerFactory;
 
@@ -75,11 +74,11 @@ public class JpaRecordWriter implements RecordWriter {
             entityManager.flush();
             entityManager.clear();
             transaction.commit();
-            LOGGER.info("Transaction committed");
+            LOGGER.debug("Transaction committed");
         } catch (Exception e) {
-            LOGGER.log(Level.SEVERE, "Unable to commit transaction", e);
+            LOGGER.error("Unable to commit transaction", e);
             transaction.rollback();
-            LOGGER.info("Transaction rolled back");
+            throw e;
         }
     }
 

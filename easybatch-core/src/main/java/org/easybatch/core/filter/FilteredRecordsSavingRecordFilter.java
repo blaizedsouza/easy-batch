@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -33,7 +33,11 @@ import org.easybatch.core.record.Record;
  * This filter delegates record filtering to another filter.
  *
  * @author Somma Daniele
+ *
+ * @deprecated This filter is deprecated since v5.3 and will be removed in v6.
+ * Use {@link FilteredRecordsCollector} instead.
  */
+@Deprecated
 public class FilteredRecordsSavingRecordFilter implements RecordFilter {
 
     private List<Record> filteredRecords = new ArrayList<>();

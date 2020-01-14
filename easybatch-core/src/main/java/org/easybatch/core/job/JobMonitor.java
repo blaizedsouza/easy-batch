@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -23,11 +23,12 @@
  */
 package org.easybatch.core.job;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.management.*;
 import java.lang.management.ManagementFactory;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static org.easybatch.core.util.Utils.JMX_MBEAN_NAME;
 import static org.easybatch.core.util.Utils.formatTime;
@@ -39,7 +40,7 @@ import static org.easybatch.core.util.Utils.formatTime;
  */
 class JobMonitor extends NotificationBroadcasterSupport implements JobMonitorMBean {
 
-    private static final Logger LOGGER = Logger.getLogger(JobMonitor.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(JobMonitor.class.getName());
 
     /**
      * JMX notification sequence number.
@@ -69,15 +70,6 @@ class JobMonitor extends NotificationBroadcasterSupport implements JobMonitorMBe
     @Override
     public long getReadCount() {
         return jobReport.getMetrics().getReadCount();
-    }
-
-    /**
-     * @deprecated use {@link JobMonitor#getFilterCount()}. This method will be removed in v5.3
-     */
-    @Override
-    @Deprecated
-    public long getFilteredCount() {
-        return jobReport.getMetrics().getFilterCount();
     }
 
     /**
@@ -139,17 +131,17 @@ class JobMonitor extends NotificationBroadcasterSupport implements JobMonitorMBe
     }
 
     void registerJmxMBeanFor(Job job) {
-        LOGGER.log(Level.INFO, "Registering JMX MBean for job {0}", job.getName());
+        LOGGER.info("Registering JMX MBean for job {}", job.getName());
         MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
         ObjectName name;
         try {
             name = new ObjectName(JMX_MBEAN_NAME + "name=" + job.getName());
             if (!mbs.isRegistered(name)) {
                 mbs.registerMBean(this, name);
-                LOGGER.log(Level.INFO, "JMX MBean registered successfully as: {0}", name.getCanonicalName());
+                LOGGER.info("JMX MBean registered successfully as: {0}", name.getCanonicalName());
             }
         } catch (Exception e) {
-            LOGGER.log(Level.WARNING, String.format("Unable to register MBean for job %s", job.getName()), e);
+            LOGGER.warn("Unable to register MBean for job {}", job.getName(), e);
         }
     }
 }

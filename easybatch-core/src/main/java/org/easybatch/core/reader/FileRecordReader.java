@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -55,7 +55,10 @@ public class FileRecordReader implements RecordReader {
      * Create a new {@link FileRecordReader}.
      *
      * @param directory to read files from
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Use {@link FileRecordReader#FileRecordReader(java.nio.file.Path)} instead
      */
+    @Deprecated
     public FileRecordReader(final File directory) {
         this(directory, false);
     }
@@ -65,7 +68,10 @@ public class FileRecordReader implements RecordReader {
      *
      * @param directory to read files from
      * @param recursive if the reader should be recursive or not
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Use {@link FileRecordReader#FileRecordReader(java.nio.file.Path, boolean)} instead
      */
+    @Deprecated
     public FileRecordReader(final File directory, final boolean recursive) {
         checkNotNull(directory, "directory");
         this.directory = directory;
@@ -133,7 +139,7 @@ public class FileRecordReader implements RecordReader {
         // no op
     }
 
-    private class FilesCollector implements FileVisitor<Path> {
+    private static class FilesCollector implements FileVisitor<Path> {
 
         private List<File> files = new ArrayList<>();
 

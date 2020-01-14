@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -30,7 +30,7 @@ import static org.easybatch.core.util.Utils.checkArgument;
 
 /**
  * {@link java.util.Calendar} type converter.
- * <p/>
+ *
  * Used to convert a raw String into a Gregorian Calendar instance.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)

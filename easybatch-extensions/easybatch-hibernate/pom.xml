@@ -3,7 +3,7 @@
     <parent>
         <artifactId>easybatch-extensions</artifactId>
         <groupId>org.easybatch</groupId>
-        <version>5.2.1-SNAPSHOT</version>
+        <version>5.3.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -12,7 +12,7 @@
 
     <name>easybatch-hibernate</name>
     <description>Extension to support Hibernate</description>
-    <url>http://www.easybatch.org</url>
+    <url>https://github.com/j-easy/easy-batch</url>
 
     <developers>
         <developer>
@@ -105,13 +105,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <configuration>
-                    <header>../../licence-header-template.txt</header>
-                </configuration>
             </plugin>
         </plugins>
     </build>

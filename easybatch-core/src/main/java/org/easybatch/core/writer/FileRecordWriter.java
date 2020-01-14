@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -33,6 +33,9 @@ import java.nio.file.Path;
  */
 public class FileRecordWriter extends OutputStreamRecordWriter {
 
+    private HeaderCallback headerCallback;
+    private FooterCallback footerCallback;
+
     /*
      * Constructors with a String
      */
@@ -41,7 +44,10 @@ public class FileRecordWriter extends OutputStreamRecordWriter {
      * Create a new {@link FileRecordWriter}.
      *
      * @param fileName the output file name.
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Use {@link FileRecordWriter#FileRecordWriter(java.nio.file.Path)} instead
      */
+    @Deprecated
     public FileRecordWriter(final String fileName) throws IOException {
         super(new FileWriter(fileName));
     }
@@ -51,7 +57,11 @@ public class FileRecordWriter extends OutputStreamRecordWriter {
      *
      * @param fileName      the output file name.
      * @param lineSeparator the line separator.
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Use {@link FileRecordWriter#FileRecordWriter(java.nio.file.Path)} instead. Starting from v6,
+     * there will be new setters for lineSeparator and charset parameters
      */
+    @Deprecated
     public FileRecordWriter(final String fileName, final String lineSeparator) throws IOException {
         super(new FileWriter(fileName), lineSeparator);
     }
@@ -62,7 +72,11 @@ public class FileRecordWriter extends OutputStreamRecordWriter {
      * @param fileName      the output file name.
      * @param lineSeparator the line separator.
      * @param charsetName   the charset name
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Use {@link FileRecordWriter#FileRecordWriter(java.nio.file.Path)} instead. Starting from v6,
+     * there will be new setters for lineSeparator and charset parameters
      */
+    @Deprecated
     public FileRecordWriter(final String fileName, final String lineSeparator, final String charsetName) throws IOException {
         super(new OutputStreamWriter(new FileOutputStream(fileName), charsetName), lineSeparator);
     }
@@ -75,7 +89,10 @@ public class FileRecordWriter extends OutputStreamRecordWriter {
      * Create a new {@link FileRecordWriter}.
      *
      * @param file the output file.
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Use {@link FileRecordWriter#FileRecordWriter(java.nio.file.Path)} instead.
      */
+    @Deprecated
     public FileRecordWriter(final File file) throws IOException {
         super(new FileWriter(file));
     }
@@ -85,7 +102,11 @@ public class FileRecordWriter extends OutputStreamRecordWriter {
      *
      * @param file          the output file.
      * @param lineSeparator the line separator.
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Use {@link FileRecordWriter#FileRecordWriter(java.nio.file.Path)} instead. Starting from v6,
+     * there will be new setters for lineSeparator and charset parameters
      */
+    @Deprecated
     public FileRecordWriter(final File file, final String lineSeparator) throws IOException {
         super(new FileWriter(file), lineSeparator);
     }
@@ -96,7 +117,11 @@ public class FileRecordWriter extends OutputStreamRecordWriter {
      * @param file          the output file.
      * @param lineSeparator the line separator.
      * @param charsetName   the charset name
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Use {@link FileRecordWriter#FileRecordWriter(java.nio.file.Path)} instead. Starting from v6,
+     * there will be new setters for lineSeparator and charset parameters
      */
+    @Deprecated
     public FileRecordWriter(final File file, final String lineSeparator, final String charsetName) throws IOException {
         super(new OutputStreamWriter(new FileOutputStream(file), charsetName), lineSeparator);
     }
@@ -119,7 +144,11 @@ public class FileRecordWriter extends OutputStreamRecordWriter {
      *
      * @param path          the output file.
      * @param lineSeparator the line separator.
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Use {@link FileRecordWriter#FileRecordWriter(java.nio.file.Path)} instead. Starting from v6,
+     * there will be new setters for lineSeparator and charset parameters
      */
+    @Deprecated
     public FileRecordWriter(final Path path, final String lineSeparator) throws IOException {
         this(path.toFile(), lineSeparator);
     }
@@ -130,7 +159,11 @@ public class FileRecordWriter extends OutputStreamRecordWriter {
      * @param path          the output file.
      * @param lineSeparator the line separator.
      * @param charsetName   the charset name
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Use {@link FileRecordWriter#FileRecordWriter(java.nio.file.Path)} instead. Starting from v6,
+     * there will be new setters for lineSeparator and charset parameters
      */
+    @Deprecated
     public FileRecordWriter(final Path path, final String lineSeparator, final String charsetName) throws IOException {
         this(path.toFile(), lineSeparator, charsetName);
     }
@@ -143,7 +176,10 @@ public class FileRecordWriter extends OutputStreamRecordWriter {
      * Create a new {@link FileRecordWriter}.
      *
      * @param fileWriter the output file writer.
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Use {@link FileRecordWriter#FileRecordWriter(java.nio.file.Path)} instead
      */
+    @Deprecated
     public FileRecordWriter(final FileWriter fileWriter) throws IOException {
         super(fileWriter);
     }
@@ -153,10 +189,65 @@ public class FileRecordWriter extends OutputStreamRecordWriter {
      *
      * @param fileWriter    the output file writer.
      * @param lineSeparator the line separator.
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Use {@link FileRecordWriter#FileRecordWriter(java.nio.file.Path)} instead. Starting from v6,
+     * there will be new setters for lineSeparator and charset parameters
      */
+    @Deprecated
     public FileRecordWriter(final FileWriter fileWriter, final String lineSeparator) throws IOException {
         super(fileWriter, lineSeparator);
     }
 
     /* No constructor with a charsetName parameter because it is not applicable to FileWriter */
+
+    /**
+     * Set a header callback.
+     * @param headerCallback to set
+     */
+    public void setHeaderCallback(HeaderCallback headerCallback) {
+        this.headerCallback = headerCallback;
+    }
+
+    /**
+     * Set a footer callback.
+     * @param footerCallback to set
+     */
+    public void setFooterCallback(FooterCallback footerCallback) {
+        this.footerCallback = footerCallback;
+    }
+
+    @Override
+    public void open() throws Exception {
+        if (headerCallback != null) {
+            headerCallback.writeHeader(outputStreamWriter);
+            outputStreamWriter.write(lineSeparator);
+            outputStreamWriter.flush();
+        }
+    }
+
+    @Override
+    public void close() throws Exception {
+        if (footerCallback != null) {
+            footerCallback.writeFooter(outputStreamWriter);
+            outputStreamWriter.write(lineSeparator);
+            outputStreamWriter.flush();
+        }
+        super.close();
+    }
+
+    /**
+     * Callback to write a header to the output file.
+     * Implementations are not required to flush the writer or write a line separator.
+     */
+    public interface HeaderCallback {
+        void writeHeader(OutputStreamWriter writer) throws IOException;
+    }
+
+    /**
+     * Callback to write a footer to the output file.
+     * Implementations are not required to flush the writer or write a line separator.
+     */
+    public interface FooterCallback {
+        void writeFooter(OutputStreamWriter writer) throws IOException;
+    }
 }

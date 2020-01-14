@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -71,6 +71,31 @@ public class JdbcRecordWriterTest extends AbstractDatabaseTest {
 
         int nbTweetsInDatabase = countRowsIn("tweet");
         assertThat(nbTweetsInDatabase).isEqualTo(nbTweetsToInsert);
+    }
+
+    @Test
+    public void testRecordWritingWhenError() throws Exception {
+        int nbTweetsToInsert = 5;
+        int batchSize = 3; // two batches: [1,2,3] and [4,5]
+        List<Tweet> tweets = createTweets(nbTweetsToInsert);
+
+        // The following will make the second batch to fail
+        tweets.get(4).setUser("ThisIsAVeryLongUsernameThatWillCauseAnError");
+
+        Job job = aNewJob()
+                .batchSize(batchSize)
+                .reader(new IterableRecordReader(tweets))
+                .writer(jdbcRecordWriter)
+                .build();
+
+        JobReport jobReport = jobExecutor.execute(job);
+
+        assertThat(jobReport).isNotNull();
+        assertThat(jobReport.getMetrics().getReadCount()).isEqualTo(nbTweetsToInsert);
+        assertThat(jobReport.getMetrics().getWriteCount()).isEqualTo(3L);
+
+        int nbTweetsInDatabase = countRowsIn("tweet");
+        assertThat(nbTweetsInDatabase).isEqualTo(3);
     }
 
     private List<Tweet> createTweets(int nbTweetsToInsert) {

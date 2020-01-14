@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -24,20 +24,23 @@
 package org.easybatch.jms;
 
 import org.easybatch.core.filter.RecordFilter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.jms.JMSException;
 import javax.jms.Message;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Filter for {@link JmsPoisonRecord}s.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *
+ * @deprecated This class is deprecated since v5.3 and will be removed in v6.
  */
+@Deprecated
 public class JmsPoisonRecordFilter implements RecordFilter<JmsRecord> {
 
-    private static final Logger LOGGER = Logger.getLogger(JmsPoisonRecordFilter.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(JmsPoisonRecordFilter.class.getName());
 
     @Override
     public JmsRecord processRecord(JmsRecord record) {
@@ -51,7 +54,7 @@ public class JmsPoisonRecordFilter implements RecordFilter<JmsRecord> {
                 }
             }
         } catch (JMSException e) {
-            LOGGER.log(Level.WARNING, "Unable to get type of JMS message " + payload, e);
+            LOGGER.warn("Unable to get type of JMS message {}", payload, e);
             return null;
         }
         if (record instanceof JmsPoisonRecord || isPoison || payload instanceof JmsPoisonMessage) {

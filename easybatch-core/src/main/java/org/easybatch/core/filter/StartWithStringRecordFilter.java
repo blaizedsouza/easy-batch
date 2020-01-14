@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,11 @@ import org.easybatch.core.record.StringRecord;
  * A {@link RecordFilter} that filters string records starting with one of the given prefixes.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *
+ * @deprecated This class is deprecated since v5.3 and will be removed in v6.
+ * Use {@link StartsWithStringRecordFilter} instead.
  */
+@Deprecated
 public class StartWithStringRecordFilter implements RecordFilter<StringRecord> {
 
     private String[] prefixes;

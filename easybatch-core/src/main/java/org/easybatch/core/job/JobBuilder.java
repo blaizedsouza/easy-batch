@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -32,11 +32,6 @@ import org.easybatch.core.reader.RecordReader;
 import org.easybatch.core.validator.RecordValidator;
 import org.easybatch.core.writer.RecordWriter;
 
-import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
-
 import static org.easybatch.core.util.Utils.checkNotNull;
 
 /**
@@ -47,22 +42,9 @@ import static org.easybatch.core.util.Utils.checkNotNull;
  */
 public final class JobBuilder {
 
-    private static final Logger LOGGER = Logger.getLogger(BatchJob.class.getName());
-
     private BatchJob job;
 
     private JobParameters parameters;
-
-    static {
-        try {
-            if (System.getProperty("java.util.logging.config.file") == null &&
-                    System.getProperty("java.util.logging.config.class") == null) {
-                LogManager.getLogManager().readConfiguration(BatchJob.class.getResourceAsStream("/logging.properties"));
-            }
-        } catch (IOException e) {
-            LOGGER.log(Level.WARNING, "Unable to load logging configuration file", e);
-        }
-    }
 
     /**
      * Create a new {@link JobBuilder}.
@@ -184,8 +166,8 @@ public final class JobBuilder {
      * @return the job builder
      */
     public JobBuilder errorThreshold(final long errorThreshold) {
-        if (errorThreshold < 1) {
-            throw new IllegalArgumentException("error threshold must be >= 1");
+        if (errorThreshold < 0) {
+            throw new IllegalArgumentException("error threshold must be >= 0");
         }
         parameters.setErrorThreshold(errorThreshold);
         return this;

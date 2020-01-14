@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -37,17 +37,20 @@ import static org.easybatch.core.util.Utils.checkNotNull;
  * Users of this class is responsible for opening/closing the output stream, maybe using a {@link JobListener}.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ * @deprecated This class is deprecated since v5.3 and will be removed in v6.
  */
+@Deprecated
 public class OutputStreamRecordWriter implements RecordWriter {
 
-    private String lineSeparator;
-    private OutputStreamWriter outputStreamWriter;
+    protected String lineSeparator;
+    protected OutputStreamWriter outputStreamWriter;
 
     /**
      * Create a new {@link OutputStreamRecordWriter}.
      *
      * @param outputStreamWriter the output stream to write records to.
      */
+    @Deprecated
     public OutputStreamRecordWriter(final OutputStreamWriter outputStreamWriter) {
         this(outputStreamWriter, LINE_SEPARATOR);
     }
@@ -58,6 +61,7 @@ public class OutputStreamRecordWriter implements RecordWriter {
      * @param outputStreamWriter the output stream to write records to.
      * @param lineSeparator      the line separator.
      */
+    @Deprecated
     public OutputStreamRecordWriter(final OutputStreamWriter outputStreamWriter, final String lineSeparator) {
         checkNotNull(outputStreamWriter, "output stream writer");
         checkNotNull(lineSeparator, "line separator");
@@ -66,11 +70,13 @@ public class OutputStreamRecordWriter implements RecordWriter {
     }
 
     @Override
+    @Deprecated
     public void open() throws Exception {
         // no op
     }
 
     @Override
+    @Deprecated
     public void writeRecords(Batch batch) throws Exception {
         for (Record record : batch) {
             outputStreamWriter.write(record.getPayload().toString());
@@ -81,6 +87,7 @@ public class OutputStreamRecordWriter implements RecordWriter {
     }
 
     @Override
+    @Deprecated
     public void close() throws Exception {
         outputStreamWriter.close();
     }

@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -26,12 +26,12 @@ package org.easybatch.xml;
 import org.easybatch.core.job.JobParameters;
 import org.easybatch.core.job.JobReport;
 import org.easybatch.core.listener.JobListener;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static java.lang.String.format;
 import static org.easybatch.core.util.Utils.LINE_SEPARATOR;
@@ -41,14 +41,19 @@ import static org.easybatch.core.util.Utils.checkNotNull;
  * Utility class to write an Xml declaration and a configurable wrapper tag to an output stream.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *
+ * @deprecated This class is deprecated since v5.3 and will be removed in v6.
+ * Use {@link org.easybatch.core.writer.FileRecordWriter.HeaderCallback} and
+ * {@link org.easybatch.core.writer.FileRecordWriter.FooterCallback} instead.
  */
+@Deprecated
 public class XmlWrapperTagWriter implements JobListener {
 
     public static final String DEFAULT_VERSION = "1.0";
     public static final String DEFAULT_ENCODING = "UTF-8";
     public static final boolean DEFAULT_STANDALONE = true;
 
-    private static final Logger LOGGER = Logger.getLogger(XmlWrapperTagWriter.class.getSimpleName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(XmlWrapperTagWriter.class.getSimpleName());
 
 
     private String version;
@@ -122,13 +127,13 @@ public class XmlWrapperTagWriter implements JobListener {
             fileWriter.write(LINE_SEPARATOR);
             fileWriter.flush();
         } catch (IOException e) {
-            LOGGER.log(Level.WARNING, "Unable to write XML declaration and wrapper opening tag to file " + file.getAbsolutePath(), e);
+            LOGGER.warn("Unable to write XML declaration and wrapper opening tag to file {}", file.getAbsolutePath(), e);
         } finally {
             if (fileWriter != null) {
                 try {
                     fileWriter.close();
                 } catch (IOException e) {
-                    LOGGER.log(Level.WARNING, "Unable to close file writer", e);
+                    LOGGER.warn("Unable to close file writer", e);
                 }
             }
         }
@@ -142,13 +147,13 @@ public class XmlWrapperTagWriter implements JobListener {
             fileWriter.write("</" + wrapperTag + ">");
             fileWriter.flush();
         } catch (IOException e) {
-            LOGGER.log(Level.WARNING, "Unable to write closing wrapper tag to file " + file.getAbsolutePath(), e);
+            LOGGER.warn("Unable to write closing wrapper tag to file {}", file.getAbsolutePath(), e);
         } finally {
             if (fileWriter != null) {
                 try {
                     fileWriter.close();
                 } catch (IOException e) {
-                    LOGGER.log(Level.WARNING, "Unable to close file writer", e);
+                    LOGGER.warn("Unable to close file writer", e);
                 }
             }
         }

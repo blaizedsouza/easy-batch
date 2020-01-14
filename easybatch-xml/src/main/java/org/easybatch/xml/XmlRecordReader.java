@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,8 @@ package org.easybatch.xml;
 
 import org.easybatch.core.reader.RecordReader;
 import org.easybatch.core.record.Header;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.xml.stream.XMLEventReader;
 import javax.xml.stream.XMLInputFactory;
@@ -34,23 +36,21 @@ import java.io.InputStream;
 import java.nio.charset.Charset;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
- * A record reader that reads xml records from an xml stream.
- * <p/>
+ * A record reader that reads xml records from an xml input stream.
+ *
  * This reader produces {@link XmlRecord} instances.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
 public class XmlRecordReader implements RecordReader {
 
-    private static final Logger LOGGER = Logger.getLogger(XmlRecordReader.class.getName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(XmlRecordReader.class.getName());
 
     private String rootElementName;
     private InputStream xmlInputStream;
-    private String charset;
+    private Charset charset;
     private XMLEventReader xmlEventReader;
     private long currentRecordNumber;
 
@@ -59,9 +59,38 @@ public class XmlRecordReader implements RecordReader {
      *
      * @param rootElementName to extract as record
      * @param xmlInputStream to read
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Use {@link XmlRecordReader#XmlRecordReader(java.io.InputStream, java.lang.String)} instead
      */
+    @Deprecated
     public XmlRecordReader(final String rootElementName, final InputStream xmlInputStream) {
         this(rootElementName, xmlInputStream, Charset.defaultCharset().name());
+    }
+
+    /**
+     * Create a new {@link XmlRecordReader}.
+     *
+     * @param xmlInputStream to read
+     * @param rootElementName to extract as record
+     */
+    public XmlRecordReader(final InputStream xmlInputStream, final String rootElementName) {
+        this(xmlInputStream, rootElementName, Charset.defaultCharset());
+    }
+
+    /**
+     * Create a new {@link XmlRecordReader}.
+     *
+     * @param rootElementName to extract as record
+     * @param xmlInputStream to read
+     * @param charset of the input stream
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Use {@link XmlRecordReader#XmlRecordReader(java.io.InputStream, java.lang.String, java.nio.charset.Charset)} instead
+     */
+    @Deprecated
+    public XmlRecordReader(final String rootElementName, final InputStream xmlInputStream, final String charset) {
+        this.rootElementName = rootElementName;
+        this.xmlInputStream = xmlInputStream;
+        this.charset = Charset.forName(charset);
     }
 
     /**
@@ -71,7 +100,7 @@ public class XmlRecordReader implements RecordReader {
      * @param xmlInputStream to read
      * @param charset of the input stream
      */
-    public XmlRecordReader(final String rootElementName, final InputStream xmlInputStream, final String charset) {
+    public XmlRecordReader(final InputStream xmlInputStream, final String rootElementName, final Charset charset) {
         this.rootElementName = rootElementName;
         this.xmlInputStream = xmlInputStream;
         this.charset = charset;
@@ -80,7 +109,7 @@ public class XmlRecordReader implements RecordReader {
     @Override
     public void open() throws Exception {
         currentRecordNumber = 0;
-        xmlEventReader = XMLInputFactory.newInstance().createXMLEventReader(xmlInputStream, charset);
+        xmlEventReader = XMLInputFactory.newInstance().createXMLEventReader(xmlInputStream, charset.name());
     }
 
     @Override
@@ -94,7 +123,9 @@ public class XmlRecordReader implements RecordReader {
                 } else if (xmlEvent.isEndElement()) {
                     writeEndElement(stringBuilder, xmlEvent);
                 } else {
-                    stringBuilder.append(escape(xmlEvent.asCharacters().getData()));
+                    if (xmlEvent.isCharacters()) {
+                        stringBuilder.append(escape(xmlEvent.asCharacters().getData()));
+                    }
                 }
             }
             writeEndElement(stringBuilder, xmlEventReader.nextEvent());
@@ -112,7 +143,7 @@ public class XmlRecordReader implements RecordReader {
     @Override
     public void close() throws Exception {
         if (xmlEventReader != null) {
-            xmlEventReader.close();
+            xmlEventReader.close(); // TODO should close underlying input stream (See Javadoc)
         }
     }
 
@@ -126,7 +157,7 @@ public class XmlRecordReader implements RecordReader {
             }
             return true;
         } catch (Exception e) {
-            LOGGER.log(Level.FINE, "Unable to peek next xml record", e); // JUL does not have DEBUG level ..
+            LOGGER.debug("Unable to peek next xml record", e);
             return false;
         }
     }
@@ -141,7 +172,7 @@ public class XmlRecordReader implements RecordReader {
                 xmlEventReader.peek().asEndElement().getName().getLocalPart().equalsIgnoreCase(rootElementName);
     }
 
-    private void writeEndElement(StringBuilder stringBuilder, XMLEvent xmlEvent) throws XMLStreamException {
+    private void writeEndElement(StringBuilder stringBuilder, XMLEvent xmlEvent) {
         if (xmlEvent.isEndElement()) {
             EndElement endElement = xmlEvent.asEndElement();
             stringBuilder.append("</").append(endElement.getName().getLocalPart()).append(">");

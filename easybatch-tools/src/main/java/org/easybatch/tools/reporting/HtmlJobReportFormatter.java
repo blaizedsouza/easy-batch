@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -25,8 +25,10 @@ package org.easybatch.tools.reporting;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
+import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.context.Context;
+import org.apache.velocity.runtime.log.NullLogChute;
 import org.easybatch.core.job.JobMetrics;
 import org.easybatch.core.job.JobParameters;
 import org.easybatch.core.job.JobReport;
@@ -44,7 +46,10 @@ import static org.easybatch.core.util.Utils.formatTime;
  * Format a report into HTML format.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *
+ * @deprecated This class is deprecated since v5.3 and will be removed in v6.
  */
+@Deprecated
 public class HtmlJobReportFormatter implements JobReportFormatter<String> {
 
     private VelocityEngine velocityEngine;
@@ -56,6 +61,7 @@ public class HtmlJobReportFormatter implements JobReportFormatter<String> {
         Properties properties = new Properties();
         properties.put("resource.loader", "class");
         properties.put("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+        properties.put(Velocity.RUNTIME_LOG_LOGSYSTEM_CLASS, NullLogChute.class.getName());
         velocityEngine = new VelocityEngine(properties);
         velocityEngine.init();
     }

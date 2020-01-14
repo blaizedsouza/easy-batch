@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -25,26 +25,26 @@ package org.easybatch.jms;
 
 import org.easybatch.core.reader.RecordReader;
 import org.easybatch.core.record.Header;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.jms.*;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static org.easybatch.core.util.Utils.checkNotNull;
 
 /**
  * A record reader that reads records from a JMS queue.
- * <p/>
+ *
  * This reader produces {@link JmsRecord} instances of type {@link javax.jms.Message}.
- * <p/>
+ *
  * It will stop reading records when a {@link JmsPoisonMessage} is sent to the queue.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
 public class JmsQueueRecordReader implements RecordReader {
 
-    private static final Logger LOGGER = Logger.getLogger(JmsQueueRecordReader.class.getSimpleName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(JmsQueueRecordReader.class.getSimpleName());
 
     private long currentRecordNumber;
     private QueueConnectionFactory queueConnectionFactory;
@@ -96,21 +96,21 @@ public class JmsQueueRecordReader implements RecordReader {
         try {
             return "JMS queue: " + queue.getQueueName();
         } catch (JMSException e) {
-            LOGGER.log(Level.SEVERE, "Unable to get jms queue name", e);
+            LOGGER.error("Unable to get jms queue name", e);
             return "N/A";
         }
     }
 
     @Override
     public void close() throws Exception {
-        if (queueConnection != null) {
-            queueConnection.close();
+        if (queueReceiver != null) {
+            queueReceiver.close();
         }
         if (queueSession != null) {
             queueSession.close();
         }
-        if (queueReceiver != null) {
-            queueReceiver.close();
+        if (queueConnection != null) {
+            queueConnection.close();
         }
     }
 

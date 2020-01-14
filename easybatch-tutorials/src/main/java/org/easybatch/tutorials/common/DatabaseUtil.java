@@ -34,6 +34,8 @@ import java.io.File;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.commons.io.FileUtils;
+
 import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.HSQL;
 
 /**
@@ -44,12 +46,11 @@ public class DatabaseUtil {
     private static EmbeddedDatabase embeddedDatabase;
     private static JdbcTemplate jdbcTemplate;
 
-    public static DataSource getDataSource() throws SQLException {
+    public static DataSource getDataSource() {
         return embeddedDatabase;
     }
 
-    public static void startEmbeddedDatabase() throws Exception {
-        System.setProperty("hsqldb.reconfig_logging", "false");
+    public static void startEmbeddedDatabase() {
         embeddedDatabase = new EmbeddedDatabaseBuilder()
                 .setType(HSQL)
                 .addScript("db/schema.sql")
@@ -62,7 +63,7 @@ public class DatabaseUtil {
         jdbcTemplate.update("delete from tweet");
     }
 
-    public static void dumpTweetTable() throws Exception {
+    public static void dumpTweetTable() {
         System.out.println("Loading tweets from the database...");
         jdbcTemplate.query("select * from tweet", new RowCallbackHandler() {
             @Override
@@ -78,10 +79,10 @@ public class DatabaseUtil {
 
     public static void cleanUpWorkingDirectory() {
         //delete hsqldb tmp files
-        new File("mem.log").delete();
-        new File("mem.properties").delete();
-        new File("mem.script").delete();
-        new File("mem.tmp").delete();
+        FileUtils.deleteQuietly(new File("mem.log"));
+        FileUtils.deleteQuietly(new File("mem.properties"));
+        FileUtils.deleteQuietly(new File("mem.script"));
+        FileUtils.deleteQuietly(new File("mem.tmp"));
     }
 
 }

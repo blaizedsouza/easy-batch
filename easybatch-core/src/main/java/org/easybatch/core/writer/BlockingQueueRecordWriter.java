@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -53,7 +53,11 @@ public class BlockingQueueRecordWriter implements RecordWriter {
      * Create a new {@link BlockingQueueRecordWriter}.
      *
      * @param blockingQueues to write records to
+     *
+     * @deprecated This constructor is deprecated since v5.3 and will be removed in v6.
+     * Starting from v6, the {@link BlockingQueueRecordWriter} will operate on a single queue.
      */
+    @Deprecated
     public BlockingQueueRecordWriter(final List<BlockingQueue<Record>> blockingQueues) {
         this.blockingQueues = blockingQueues;
     }

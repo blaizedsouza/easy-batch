@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -21,38 +21,36 @@
  *   OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  *   THE SOFTWARE.
  */
-package org.easybatch.core.record;
+package org.easybatch.core.filter;
 
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnitRunner;
+import org.easybatch.core.record.StringRecord;
 
-import java.util.Arrays;
-import java.util.List;
+/**
+ * A {@link RecordFilter} that filters string records starting with one of the given prefixes.
+ *
+ * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ */
+public class StartsWithStringRecordFilter implements RecordFilter<StringRecord> {
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+    private String[] prefixes;
 
-@RunWith(MockitoJUnitRunner.class)
-public class PayloadExtractorTest {
-
-    @Mock
-    private Object payload1, payload2;
-    @Mock
-    private Record<Object> record1, record2;
-
-    @Before
-    public void setUp() throws Exception {
-        when(record1.getPayload()).thenReturn(payload1);
-        when(record2.getPayload()).thenReturn(payload2);
+    /**
+     * Create a new {@link StartsWithStringRecordFilter}.
+     *
+     * @param prefixes prefixes that cause the record to be filtered.
+     */
+    public StartsWithStringRecordFilter(final String... prefixes) {
+        this.prefixes = prefixes;
     }
 
-    @Test
-    public void testExtractPayloadsFromListOfRecords() throws Exception {
-        List<Object> list = PayloadExtractor.extractPayloads(Arrays.asList(record1, record2));
-        assertThat(list).containsExactly(payload1, payload2);
+    public StringRecord processRecord(final StringRecord record) {
+        String payload = record.getPayload();
+        for (String prefix : prefixes) {
+            if (payload.startsWith(prefix)) {
+                return null;
+            }
+        }
+        return record;
     }
 
 }

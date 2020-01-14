@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -39,7 +39,7 @@ import static org.easybatch.core.util.Utils.checkNotNull;
 
 /**
  * Read records using the Java Persistence API.
- * <p/>
+ *
  * This reader produces {@link GenericRecord} instances with JPA entities as payload.
  *
  * @param <T> the type of objects this reader will read.
@@ -62,7 +62,7 @@ public class JpaRecordReader<T> implements RecordReader {
 
     /**
      * Reader that reads data using the Java Persistence API.
-     * <p/>
+     *
      * This reader produces {@link GenericRecord} instances with JPA entities as payload.
      *
      * @param entityManagerFactory the entity manager factory

@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -23,9 +23,12 @@
  */
 package org.easybatch.tools.reporting;
 
+import org.easybatch.core.job.DefaultJobReportFormatter;
 import org.easybatch.core.job.JobParameters;
 import org.easybatch.core.job.JobReport;
+import org.easybatch.core.job.JobReportFormatter;
 import org.easybatch.core.listener.JobListener;
+import org.easybatch.core.util.Utils;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -36,7 +39,10 @@ import java.util.Properties;
  * Job listener that sends the job report by email to a given account.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *
+ * @deprecated This class is deprecated since v5.3 and will be removed in v6.
  */
+@Deprecated
 public class JobReportEmailSender implements JobListener {
 
     public static final String USER = "org.easybatch.tools.reporting.email.user";
@@ -47,6 +53,7 @@ public class JobReportEmailSender implements JobListener {
 
     private Properties properties;
     private EmailSender messageSender;
+    private JobReportFormatter<String> jobReportFormatter;
 
     /**
      * Create a new {@link JobReportEmailSender}.
@@ -58,6 +65,17 @@ public class JobReportEmailSender implements JobListener {
         validate(properties);
         this.properties = properties;
         this.messageSender = new EmailSender();
+        this.jobReportFormatter = new DefaultJobReportFormatter();
+    }
+
+    /**
+     * Set a custom {@link JobReportFormatter}.
+     *
+     * @param jobReportFormatter used to format the report before sending the email
+     */
+    public void setJobReportFormatter(JobReportFormatter<String> jobReportFormatter) {
+        Utils.checkNotNull(jobReportFormatter, "job report formatter");
+        this.jobReportFormatter = jobReportFormatter;
     }
 
     JobReportEmailSender(final Properties properties, final EmailSender emailSender) {
@@ -73,17 +91,22 @@ public class JobReportEmailSender implements JobListener {
 
     @Override
     public void afterJobEnd(JobReport jobReport) {
-        send(jobReport);
+        String formattedJobReport = format(jobReport);
+        send(formattedJobReport);
     }
 
-    private void send(JobReport jobReport) {
+    private String format(JobReport jobReport) {
+        return jobReportFormatter.formatReport(jobReport);
+    }
+
+    private void send(String formattedJobReport) {
         Session session = Session.getInstance(properties, getAuthenticator());
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(properties.getProperty(SENDER)));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(properties.getProperty(RECIPIENT)));
             message.setSubject(properties.getProperty(SUBJECT));
-            message.setText(jobReport.toString());
+            message.setText(formattedJobReport);
             messageSender.send(message);
         } catch (MessagingException e) {
             throw new RuntimeException("Unable to send job report by email", e);

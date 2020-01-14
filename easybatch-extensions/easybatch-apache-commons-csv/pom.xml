@@ -3,7 +3,7 @@
     <parent>
         <artifactId>easybatch-extensions</artifactId>
         <groupId>org.easybatch</groupId>
-        <version>5.2.1-SNAPSHOT</version>
+        <version>5.3.1-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -12,10 +12,10 @@
 
     <name>easybatch-apache-commons-csv</name>
     <description>Extension to support Apache Commons CSV</description>
-    <url>http://www.easybatch.org</url>
+    <url>https://github.com/j-easy/easy-batch</url>
 
     <properties>
-        <commons-csv.version>1.5</commons-csv.version>
+        <commons-csv.version>1.7</commons-csv.version>
     </properties>
 
     <developers>
@@ -101,13 +101,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-            </plugin>
-            <plugin>
-                <groupId>com.mycila</groupId>
-                <artifactId>license-maven-plugin</artifactId>
-                <configuration>
-                    <header>../../licence-header-template.txt</header>
-                </configuration>
             </plugin>
         </plugins>
     </build>

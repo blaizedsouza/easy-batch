@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -41,7 +41,7 @@ public class DefaultJobReportMergerTest {
     }
 
     @Test
-    public void testReportsMerging() throws Exception {
+    public void testReportsMerging() {
 
         Properties systemProperties = new Properties();
         JobMetrics metrics1 = new JobMetrics();
@@ -96,6 +96,5 @@ public class DefaultJobReportMergerTest {
         // job name is the concatenation of partial job names
         assertThat(finalJobReport.getJobName()).isEqualTo("job1|job2");
         assertThat(finalJobReport.getSystemProperties()).isEqualTo(systemProperties);
-
     }
 }

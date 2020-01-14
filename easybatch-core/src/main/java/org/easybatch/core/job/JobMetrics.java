@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -48,24 +48,28 @@ public class JobMetrics implements Serializable {
 
     private Map<String, Object> customMetrics = new HashMap<>();
 
-    /**
-     * @deprecated use {@link JobMetrics#incrementFilterCount()}. This method will be removed in v5.3
-     */
-    @Deprecated
-    public void incrementFilteredCount() {
+    public void incrementFilterCount() {
         filterCount++;
     }
 
-    public void incrementFilterCount() {
-        filterCount++;
+    public void incrementFilterCount(long count) {
+        filterCount += count;
     }
 
     public void incrementErrorCount() {
         errorCount++;
     }
 
+    public void incrementErrorCount(long count) {
+        errorCount += count;
+    }
+
     public void incrementReadCount() {
         readCount++;
+    }
+
+    public void incrementReadCount(long count) {
+        readCount += count;
     }
 
     public void incrementWriteCount(long count) {
@@ -90,14 +94,6 @@ public class JobMetrics implements Serializable {
 
     public long getDuration() {
         return getEndTime() - getStartTime();
-    }
-
-    /**
-     * @deprecated use {@link JobMetrics#getFilterCount()}. This method will be removed in v5.3
-     */
-    @Deprecated
-    public long getFilteredCount() {
-        return filterCount;
     }
 
     public long getFilterCount() {

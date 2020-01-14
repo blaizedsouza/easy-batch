@@ -1,7 +1,7 @@
 /**
  * The MIT License
  *
- *   Copyright (c) 2017, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
+ *   Copyright (c) 2020, Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  *
  *   Permission is hereby granted, free of charge, to any person obtaining a copy
  *   of this software and associated documentation files (the "Software"), to deal
@@ -25,6 +25,8 @@ package org.easybatch.jdbc;
 
 import org.easybatch.core.reader.RecordReader;
 import org.easybatch.core.record.Header;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -32,22 +34,20 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 import static org.easybatch.core.util.Utils.checkArgument;
 import static org.easybatch.core.util.Utils.checkNotNull;
 
 /**
  * A {@link RecordReader} that reads records from a database using JDBC API.
- * <p/>
+ *
  * This reader produces {@link JdbcRecord} instances.
  *
  * @author Mahmoud Ben Hassine (mahmoud.benhassine@icloud.com)
  */
 public class JdbcRecordReader implements RecordReader {
 
-    private static final Logger LOGGER = Logger.getLogger(JdbcRecordReader.class.getSimpleName());
+    private static final Logger LOGGER = LoggerFactory.getLogger(JdbcRecordReader.class.getSimpleName());
 
     private DataSource dataSource;
     private Connection connection;
@@ -97,7 +97,7 @@ public class JdbcRecordReader implements RecordReader {
         try {
             return resultSet.next();
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "An exception occurred during checking the existence of next database record", e);
+            LOGGER.error("An exception occurred during checking the existence of next database record", e);
             return false;
         }
     }
@@ -116,7 +116,7 @@ public class JdbcRecordReader implements RecordReader {
         try {
             return "Connection URL: " + connection.getMetaData().getURL() + " | Query string: " + query;
         } catch (SQLException e) {
-            LOGGER.log(Level.SEVERE, "Unable to get data source name", e);
+            LOGGER.error("Unable to get data source name", e);
             return "N/A";
         }
     }
